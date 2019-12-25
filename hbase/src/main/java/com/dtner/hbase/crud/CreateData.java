@@ -1,8 +1,7 @@
 package com.dtner.hbase.crud;
 
+import com.dtner.hbase.con.ConnectionHbaseUtils;
 import com.dtner.hbase.create.CreateTableUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -19,11 +18,6 @@ import java.util.List;
  */
 public class CreateData {
 
-    public Connection getCon() throws IOException {
-        Configuration conf = HBaseConfiguration.create();
-        return ConnectionFactory.createConnection(conf);
-
-    }
 
     /**
      * 普通方式保存
@@ -32,7 +26,7 @@ public class CreateData {
     @Test
     public void testPut() throws IOException {
 
-        Connection con = getCon();
+        Connection con = ConnectionHbaseUtils.getCon();
 
         Admin admin = con.getAdmin();
 
@@ -59,7 +53,7 @@ public class CreateData {
         put.addColumn(Bytes.toBytes(firstFamily),Bytes.toBytes("test-1-2"),Bytes.toBytes("value-1-3"));
         put.addColumn(Bytes.toBytes(secondFaily),Bytes.toBytes("test-2-1"),Bytes.toBytes("value-2-1"));
         table.put(put);
-        closeCon(con);
+        ConnectionHbaseUtils.closeCon(con);
 
     }
 
@@ -71,7 +65,7 @@ public class CreateData {
     @Test
     public void bathPut() throws Exception {
 
-        Connection con = getCon();
+        Connection con = ConnectionHbaseUtils.getCon();
         TableName tableName = TableName.valueOf("user_test_bath");
         // Column Family
         String firstFamily = "dtner-family-1";
@@ -106,7 +100,7 @@ public class CreateData {
 
         System.out.println(results.toString());
 
-        con.close();
+        ConnectionHbaseUtils.closeCon(con);
 
     }
 
@@ -118,7 +112,7 @@ public class CreateData {
     @Test
     public void casPut() throws Exception {
 
-        Connection con = getCon();
+        Connection con = ConnectionHbaseUtils.getCon();
         TableName tableName = TableName.valueOf("user_test_cas");
         // Column Family
         String firstFamily = "dtner-family-1";
@@ -149,17 +143,9 @@ public class CreateData {
                 .ifNotExists()
                 .thenPut(putUpdate);
 
+        ConnectionHbaseUtils.closeCon(con);
+
     }
 
-
-
-    /**
-     * 关闭连接
-     * @param con
-     * @throws IOException
-     */
-    public void closeCon(Connection con) throws IOException {
-        con.close();
-    }
 
 }

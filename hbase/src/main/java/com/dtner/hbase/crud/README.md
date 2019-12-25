@@ -21,4 +21,8 @@
 
 注意: Hbase 新版本已经移除了 getRowOrBefore. 最好结合 es 来进行模糊查询。
 
-
+### 删除 Hbase 数据
+1. 创建连接 Connection
+2. 通过 Connection 获得 Table 对象
+3. 创建 Delete
+4. 通过 Table 对象删除数据

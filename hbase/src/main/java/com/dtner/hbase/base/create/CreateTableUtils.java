@@ -1,4 +1,4 @@
-package com.dtner.hbase.create;
+package com.dtner.hbase.base.create;
 
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;

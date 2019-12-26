@@ -1,6 +1,6 @@
-package com.dtner.hbase.crud;
+package com.dtner.hbase.base.crud;
 
-import com.dtner.hbase.con.ConnectionHbaseUtils;
+import com.dtner.hbase.base.con.ConnectionHbaseUtils;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Get;

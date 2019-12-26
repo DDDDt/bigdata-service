@@ -1,7 +1,7 @@
-package com.dtner.hbase.crud;
+package com.dtner.hbase.base.crud;
 
-import com.dtner.hbase.con.ConnectionHbaseUtils;
-import com.dtner.hbase.create.CreateTableUtils;
+import com.dtner.hbase.base.con.ConnectionHbaseUtils;
+import com.dtner.hbase.base.create.CreateTableUtils;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @Author: dt
- * @Description:　向 hbase 插入数据
+ * @Description:　向 hbase 插入数据,重新插入数据会覆盖以前的版本
  * @Date: Create in 19-12-18
  */
 public class CreateData {

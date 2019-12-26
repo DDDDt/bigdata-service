@@ -1,4 +1,4 @@
-package com.dtner.hbase.con;
+package com.dtner.hbase.base.con;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;

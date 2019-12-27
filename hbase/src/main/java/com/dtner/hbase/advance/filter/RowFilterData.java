@@ -20,7 +20,7 @@ import java.io.IOException;
  * @Author dt
  * @Date 19-12-27
  **/
-public class RowFilterScan {
+public class RowFilterData {
 
     /**
      * 使用 row filter
@@ -42,6 +42,7 @@ public class RowFilterScan {
         ResultScanner scanner = table.getScanner(scan);
         scanner.forEach(x -> System.out.println(x.toString()));
 
+        scanner.close();
         ConnectionHbaseUtils.closeCon(con);
 
     }

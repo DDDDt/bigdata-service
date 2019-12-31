@@ -6,38 +6,38 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
-import org.apache.hadoop.hbase.filter.InclusiveStopFilter;
-import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.hbase.filter.ColumnPaginationFilter;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 /**
- * @ClassName InclusiveStopFilterData
- * @Description: 包含结束的过滤器
+ * @ClassName ColumnPaginationFilterData
+ * @Description: 列分页过滤器
  * @Author dt
- * @Date 19-12-30
+ * @Date 19-12-31
  **/
-public class InclusiveStopFilterData {
+public class ColumnPaginationFilterData {
 
     /**
-     *  包含结束的过滤器
+     * 列分页过滤器，与 PageFilter 相似，这个过滤器可以对一行的所有列进行分页。
      * @throws IOException
      */
     @Test
-    public void inclusiveStopFilterData() throws IOException {
+    public void columnPaginationFilterData() throws IOException {
 
         Connection con = ConnectionHbaseUtils.getCon();
 
         String tableName = "user_test_bath";
         Table table = con.getTable(TableName.valueOf(tableName));
 
-        InclusiveStopFilter inclusiveStopFilter = new InclusiveStopFilter(Bytes.toBytes("bath_put_2_1576823205294"));
+        ColumnPaginationFilter columnPaginationFilter = new ColumnPaginationFilter(1, 2);
         Scan scan = new Scan()
-                .setFilter(inclusiveStopFilter);
+                .setFilter(columnPaginationFilter);
 
         ResultScanner resultScanner = table.getScanner(scan);
         resultScanner.forEach(x -> System.out.println(x.toString()));
+
         resultScanner.close();
         ConnectionHbaseUtils.closeCon(con);
 

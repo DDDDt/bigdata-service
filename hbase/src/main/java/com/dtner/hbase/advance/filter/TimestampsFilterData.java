@@ -6,41 +6,48 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
-import org.apache.hadoop.hbase.filter.InclusiveStopFilter;
-import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.hbase.filter.TimestampsFilter;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @ClassName InclusiveStopFilterData
- * @Description: 包含结束的过滤器
+ * @ClassName TimestampsFilterData
+ * @Description: 时间戳过滤器
  * @Author dt
- * @Date 19-12-30
+ * @Date 19-12-31
  **/
-public class InclusiveStopFilterData {
+public class TimestampsFilterData {
 
     /**
-     *  包含结束的过滤器
+     * 当用户需要在扫描结果中对版本进行细粒度的控制时，这个过滤器可以满足需求。
      * @throws IOException
      */
     @Test
-    public void inclusiveStopFilterData() throws IOException {
+    public  void timestampsFilterData() throws IOException {
 
         Connection con = ConnectionHbaseUtils.getCon();
 
         String tableName = "user_test_bath";
         Table table = con.getTable(TableName.valueOf(tableName));
 
-        InclusiveStopFilter inclusiveStopFilter = new InclusiveStopFilter(Bytes.toBytes("bath_put_2_1576823205294"));
+        List<Long> ts = new ArrayList<>();
+        ts.add(1576820472802L);
+        ts.add(1577327150676L);
+        ts.add(1576820433082L);
+        ts.add(1576823178285L);
+        TimestampsFilter timestampsFilter = new TimestampsFilter(ts);
         Scan scan = new Scan()
-                .setFilter(inclusiveStopFilter);
+                .setFilter(timestampsFilter);
 
         ResultScanner resultScanner = table.getScanner(scan);
+
         resultScanner.forEach(x -> System.out.println(x.toString()));
+
         resultScanner.close();
         ConnectionHbaseUtils.closeCon(con);
-
     }
 
 }

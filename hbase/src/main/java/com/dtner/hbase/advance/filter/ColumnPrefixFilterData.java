@@ -6,39 +6,41 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
-import org.apache.hadoop.hbase.filter.InclusiveStopFilter;
+import org.apache.hadoop.hbase.filter.ColumnPrefixFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 /**
- * @ClassName InclusiveStopFilterData
- * @Description: 包含结束的过滤器
+ * @ClassName PrefixFilterData
+ * @Description: 列前缀过滤器
  * @Author dt
- * @Date 19-12-30
+ * @Date 19-12-31
  **/
-public class InclusiveStopFilterData {
+public class ColumnPrefixFilterData {
 
     /**
-     *  包含结束的过滤器
+     * 列前缀过滤器
      * @throws IOException
      */
     @Test
-    public void inclusiveStopFilterData() throws IOException {
+    public void columnPrefixFilterData() throws IOException {
 
         Connection con = ConnectionHbaseUtils.getCon();
 
         String tableName = "user_test_bath";
         Table table = con.getTable(TableName.valueOf(tableName));
 
-        InclusiveStopFilter inclusiveStopFilter = new InclusiveStopFilter(Bytes.toBytes("bath_put_2_1576823205294"));
+        ColumnPrefixFilter columnPrefixFilter = new ColumnPrefixFilter(Bytes.toBytes("bath-qualifier-2"));
         Scan scan = new Scan()
-                .setFilter(inclusiveStopFilter);
+                .setFilter(columnPrefixFilter);
 
         ResultScanner resultScanner = table.getScanner(scan);
         resultScanner.forEach(x -> System.out.println(x.toString()));
+
         resultScanner.close();
+
         ConnectionHbaseUtils.closeCon(con);
 
     }

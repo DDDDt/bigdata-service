@@ -6,41 +6,42 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
-import org.apache.hadoop.hbase.filter.InclusiveStopFilter;
-import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.hbase.filter.ColumnCountGetFilter;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 /**
- * @ClassName InclusiveStopFilterData
- * @Description: 包含结束的过滤器
+ * @ClassName ColumnCountGetFilter
+ * @Description: 列计数过滤器
  * @Author dt
- * @Date 19-12-30
+ * @Date 19-12-31
  **/
-public class InclusiveStopFilterData {
+public class ColumnCountGetFilterData {
 
     /**
-     *  包含结束的过滤器
+     * 用来返回每行最多取回多少列
      * @throws IOException
      */
     @Test
-    public void inclusiveStopFilterData() throws IOException {
+    public void columnCountGetFilterData() throws IOException {
 
         Connection con = ConnectionHbaseUtils.getCon();
 
         String tableName = "user_test_bath";
         Table table = con.getTable(TableName.valueOf(tableName));
 
-        InclusiveStopFilter inclusiveStopFilter = new InclusiveStopFilter(Bytes.toBytes("bath_put_2_1576823205294"));
+        ColumnCountGetFilter columnCountGetFilter = new ColumnCountGetFilter(1);
         Scan scan = new Scan()
-                .setFilter(inclusiveStopFilter);
+                .setFilter(columnCountGetFilter);
 
         ResultScanner resultScanner = table.getScanner(scan);
-        resultScanner.forEach(x -> System.out.println(x.toString()));
-        resultScanner.close();
-        ConnectionHbaseUtils.closeCon(con);
 
+        resultScanner.forEach(x -> System.out.println(x.toString()));
+
+        resultScanner.close();
+
+        ConnectionHbaseUtils.closeCon(con);
     }
 
 }

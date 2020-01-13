@@ -29,5 +29,21 @@ HMaster 的主要功能有：
 HLog(WAL Log): WAL 意为 write ahead log(预写日志)，用来做灾难恢复使用，HLog 记录数据的变更，
 包括序列号和实际数据，所以一旦 region server 宕机，就可以从 log 中回滚还没有持久化的数据。
 
-### 5. HFile
+### 5. Store
+每一个 region 有一个或多个 store 组成，至少是一个 store，hbase 会把一起访问的数据放在一个 store 里面，
+即为每个 ColumnFamily 建一个 store（即有几个 ColumnFamily，也就有几个 Store）。一个 Store 由一个 memStore
+和0或多个 StoreFile 组成。
+
+### 6. MemStore
+MemStore 是放在内存里的，保存修改的数据及 keyValues.当 MemStore 的大小达到一个阈值时，MemStore 会被
+flush 到文件，即生成一个快照。目前 hbase 会有一个线程来负责 MemStore 的 Flush 操作。
+
+### 7. StoreFile
+MemStore 内存中的数据写到文件后就是 StoreFile （即 MemStore 的每次 flush 操作都会生成一个
+新的 StoreFile)，StoreFile 底层是以 HFile 的格式保存。
+
+### 8. HFile
 HBase 的数据最终是以 HFile 的形式存储在 HDFS 中的，HBase 中 HFile 有着自己的格式。
+
+### 2.  Region 查找
+通过 zookeeper 的 -root-和.meta.查找 Region 所在的 RegionServer 地址
